@@ -3,10 +3,7 @@ package telran.net;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import telran.view.InputOutput;
-import telran.view.Item;
-import telran.view.Menu;
-import telran.view.StandardInputOutput;
+import telran.view.*;
 
 public class Main {
     final static HashSet<String> operationsSet = new HashSet<String>(Arrays.asList("reverse", "length"));
@@ -16,7 +13,7 @@ public class Main {
 
         Item[] items = {
                 Item.of("Get started!", Main::startSession),
-                Item.ofExit()
+                Item.of("Exit", Main::exit, true)
         };
         Menu menu = new Menu("Take a Length or Reverse the String Application", items);
         menu.perform(new StandardInputOutput());
@@ -37,7 +34,10 @@ public class Main {
         io.writeLine("Sent: " + string);
         io.writeLine("Operation:" + operationType);
         io.writeLine("Received response: " + response);
-        
-
+    }
+    static void exit(InputOutput io) {
+        if(echoClient != null) {
+            echoClient.close();
+        }
     }
 }
