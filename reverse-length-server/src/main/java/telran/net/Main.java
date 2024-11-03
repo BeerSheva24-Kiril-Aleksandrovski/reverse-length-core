@@ -18,11 +18,12 @@ public class Main {
     private static void runSession(Socket socket) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintStream writer = new PrintStream(socket.getOutputStream())) {
-            String operationType;
-            while ((operationType = reader.readLine()) != null) {
-                String receivedString = reader.readLine();
+            String request;
+            while ((request = reader.readLine()) != null) {
+                String [] requestParts = request.split("#");
+                String receivedString = requestParts[0];
+                String operationType = requestParts[1];
                 String responseString;
-
                 switch (operationType) {
                     case "length":
                         responseString = String.valueOf(receivedString.length());
@@ -34,9 +35,7 @@ public class Main {
                         responseString = "No such operation";
                         break;
                 }
-                
                 writer.println(responseString);
-
             }
         } catch (Exception e) {
             System.out.println("Client closed connection abnormally");
