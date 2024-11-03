@@ -18,7 +18,7 @@ public class EchoClient {
     }
     public String sendAndReceive(String string, String operationType) {
         try {
-            writer.println(string + "#" + operationType);
+            writer.println(operationType + "#" + string);
             return reader.readLine();
         } catch (Exception e) {
             throw new RuntimeException(e);

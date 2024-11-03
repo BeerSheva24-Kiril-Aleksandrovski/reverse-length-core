@@ -20,9 +20,9 @@ public class Main {
                 PrintStream writer = new PrintStream(socket.getOutputStream())) {
             String request;
             while ((request = reader.readLine()) != null) {
-                String [] requestParts = request.split("#");
-                String receivedString = requestParts[0];
-                String operationType = requestParts[1];
+                int index = request.indexOf("#");
+                String operationType = request.substring(0, index);
+                String receivedString = request.substring(index + 1);
                 String responseString;
                 switch (operationType) {
                     case "length":
