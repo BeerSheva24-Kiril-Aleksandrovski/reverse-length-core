@@ -2,6 +2,8 @@ package telran.net;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import org.json.JSONObject;
+
 
 import telran.view.*;
 
@@ -27,12 +29,15 @@ public class Main {
         }
         echoClient = new EchoClient(host, port);
         String string = io.readString("Enter any string");
-        String operationType = io.readStringOptions("Chose operation from list:" + operationsSet.toString(), "Wrong operation", operationsSet);
-        String response = echoClient.sendAndReceive(string, operationType);
+        String type = io.readStringOptions("Chose operation from list:" + operationsSet.toString(), "Wrong operation", operationsSet);
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("type",type);
+        jsonObj.put("string", string);
+        String response = echoClient.sendAndReceive(jsonObj.toString());
     
         io.writeLine("\nConnected to " + host + ":" + port);
         io.writeLine("Sent: " + string);
-        io.writeLine("Operation:" + operationType);
+        io.writeLine("Operation:" + type);
         io.writeLine("Received response: " + response);
     }
     static void exit(InputOutput io) {

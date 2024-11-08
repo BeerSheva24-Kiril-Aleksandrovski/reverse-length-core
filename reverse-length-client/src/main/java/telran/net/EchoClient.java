@@ -16,9 +16,9 @@ public class EchoClient {
             throw new RuntimeException(e);
         }
     }
-    public String sendAndReceive(String string, String operationType) {
+    public String sendAndReceive(String string) {
         try {
-            writer.println(operationType + "#" + string);
+            writer.println(string);
             return reader.readLine();
         } catch (Exception e) {
             throw new RuntimeException(e);
