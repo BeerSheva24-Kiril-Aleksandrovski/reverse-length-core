@@ -2,6 +2,8 @@ package telran.net;
 
 import java.net.*;
 import java.io.*;
+import org.json.JSONObject;
+
 
 public class Main {
     private static final int PORT = 4000;
@@ -20,25 +22,22 @@ public class Main {
                 PrintStream writer = new PrintStream(socket.getOutputStream())) {
             String request;
             while ((request = reader.readLine()) != null) {
-                int index = request.indexOf("#");
-                String operationType = request.substring(0, index);
-                String receivedString = request.substring(index + 1);
-                String responseString;
-                switch (operationType) {
-                    case "length":
-                        responseString = String.valueOf(receivedString.length());
-                        break;
-                    case "reverse":
-                        responseString = new StringBuilder(receivedString).reverse().toString();
-                        break;
-                    default:
-                        responseString = "No such operation";
-                        break;
-                }
-                writer.println(responseString);
+                String response = getResponse(request);
+                writer.println(response);
             }
         } catch (Exception e) {
             System.out.println("Client closed connection abnormally");
         }
+    }
+    private static String getResponse(String request) {
+        JSONObject jsonObj = new JSONObject(request);
+        String type = jsonObj.getString("type");
+        String string = jsonObj.getString("string");
+        String response = switch(type){
+            case "reverse" -> new StringBuilder(string).reverse().toString();
+            case "length" -> string.length() + "";
+            default -> type + " Wrong type";
+        };
+        return response;
     }
 }
